@@ -1,3 +1,7 @@
 node_modules
 .data
 .env
+
+# cookies de teste do curl
+-H
+cookies*.txt
