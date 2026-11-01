@@ -1,0 +1,11 @@
+services:
+  colheita-urbana:
+    build: .
+    ports: ["3000:3000"]
+    environment:
+      APP_ENC_KEY: ${APP_ENC_KEY:?defina uma chave de 64 caracteres hexadecimais}
+      MAPS_PROVIDER: osrm
+    volumes: ["dados:/data"]
+    restart: unless-stopped   # RNF13 - autorrecuperação
+volumes:
+  dados:

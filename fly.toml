@@ -1,0 +1,29 @@
+app = "colheita-urbana-api"   # troque por um nome único
+primary_region = "gru"
+
+[build]
+
+[env]
+  NODE_ENV = "production"
+  PORT = "3000"
+  DATA_DIR = "/data"
+  TRUST_PROXY = "1"
+  MAPS_PROVIDER = "local"   # "osrm" usa o servidor público de demonstração (uso leve); para produção hospede o seu
+
+[[mounts]]
+  source = "dados"
+  destination = "/data"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = "off"     # o agendador (expiração, backup) e o SSE precisam do processo ligado
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    path = "/healthz"
+    timeout = "3s"
