@@ -1,0 +1,5 @@
+name = "colheita-urbana"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = "web"
+# Variáveis (BACKEND_URL, PROXY_SECRET) são definidas como secrets/variáveis do projeto no painel
+# ou com `wrangler pages secret put`, para não ficarem no repositório.
