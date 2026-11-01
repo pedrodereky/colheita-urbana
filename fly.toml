@@ -1,4 +1,4 @@
-app = "colheita-urbana-api"   # troque por um nome único
+app = "colheita-urbana-api-pedro"
 primary_region = "gru"
 
 [build]
