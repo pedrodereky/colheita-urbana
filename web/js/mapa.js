@@ -15,7 +15,7 @@ export function criarMapa({ pequeno = false } = {}) {
   function iniciar() {
     if (api.mapa) return;
     api.mapa = window.L.map(el, { scrollWheelZoom: false }).setView(POS, 11);
-    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(api.mapa);
+    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap', referrerPolicy: 'strict-origin-when-cross-origin' }).addTo(api.mapa);
     api.pendentes?.forEach((f) => f());
     setTimeout(() => api.mapa.invalidateSize(), 150);
   }
