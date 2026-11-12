@@ -11,9 +11,10 @@ import { resetarLimitador } from './modules/auth.js';
 import { devolverOfertasNaoRetiradas, expirarOfertasDisponiveis, alertarValidadeCritica } from './modules/jobs.js';
 import { gerarCnpj, gerarCpf } from './seed.js';
 
-if (config.producao) { console.error('Dados fictícios bloqueados em produção.'); process.exit(1); }
-if (!get('SELECT 1 FROM usuarios LIMIT 1')) { console.error('Rode `npm run seed` antes.'); process.exit(1); }
-if (get('SELECT 1 FROM historico_doacoes LIMIT 1')) { console.log('Já existem doações no histórico; nada foi feito.'); process.exit(0); }
+export async function popularDemoCompleto() {
+if (config.producao && process.env.AUTO_DEMO !== '1') { console.error('Dados fictícios bloqueados em produção.'); return false; }
+if (!get('SELECT 1 FROM usuarios LIMIT 1')) { console.error('Rode `npm run seed` antes.'); return false; }
+if (get('SELECT 1 FROM historico_doacoes LIMIT 1')) { console.log('Já existem doações no histórico; nada foi feito.'); return false; }
 
 const servidor = criarServidor();
 await new Promise((ok) => servidor.listen(0, '127.0.0.1', ok));
@@ -22,7 +23,7 @@ const base = `http://127.0.0.1:${servidor.address().port}`;
 class Cliente {
   constructor() { this.cookie = ''; }
   async req(m, c, b) {
-    const r = await fetch(base + c, { method: m, headers: { ...(b !== undefined ? { 'content-type': 'application/json' } : {}), ...(this.cookie ? { cookie: this.cookie } : {}) }, body: b !== undefined ? JSON.stringify(b) : undefined });
+    const r = await fetch(base + c, { method: m, headers: { ...(b !== undefined ? { 'content-type': 'application/json' } : {}), ...(this.cookie ? { cookie: this.cookie } : {}), ...(config.proxySecret ? { 'x-proxy-secret': config.proxySecret } : {}) }, body: b !== undefined ? JSON.stringify(b) : undefined });
     const sc = r.headers.get('set-cookie'); if (sc) this.cookie = sc.split(';')[0];
     const d = (r.headers.get('content-type') || '').includes('json') ? await r.json() : null;
     if (!r.ok) throw new Error(`${m} ${c} → ${r.status} ${d?.erro || ''}`);
@@ -189,4 +190,11 @@ for (const [cl, notas, g, txt] of [[osc1, [5, 4, 5], 5, 'Plataforma muito simple
 alertarValidadeCritica();
 console.log('\nPronto! Resumo:');
 for (const [rot, sql] of [['usuários', 'SELECT COUNT(*) n FROM usuarios'], ['ofertas', 'SELECT COUNT(*) n FROM ofertas'], ['doações entregues', "SELECT COUNT(*) n FROM historico_doacoes WHERE situacao='ENTREGUE'"], ['recusadas', "SELECT COUNT(*) n FROM historico_doacoes WHERE situacao='RECUSADA'"], ['recibos', 'SELECT COUNT(*) n FROM recibos'], ['avaliações', 'SELECT COUNT(*) n FROM avaliacoes'], ['selos/certificados', 'SELECT COUNT(*) n FROM reconhecimentos'], ['registros de auditoria', 'SELECT COUNT(*) n FROM logs_auditoria']]) console.log(`  ${rot}: ${get(sql).n}`);
-servidor.close(); servidor.closeAllConnections?.(); process.exit(0);
+servidor.close(); servidor.closeAllConnections?.();
+return true;
+}
+
+if (process.argv[1] && process.argv[1].endsWith('seed-demo.js')) {
+  await popularDemoCompleto();
+  process.exit(0);
+}
