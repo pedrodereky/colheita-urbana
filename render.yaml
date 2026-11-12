@@ -1,0 +1,19 @@
+# Blueprint do Render para o MODO DEMONSTRAÇÃO (plano gratuito, sem disco persistente).
+# O banco é recriado com dados fictícios a cada início (AUTO_DEMO=1); cadastros feitos durante o uso
+# não sobrevivem a reinícios. Para uso real, hospede com disco persistente (veja DEPLOY.md).
+services:
+  - type: web
+    name: colheita-urbana-demo
+    runtime: docker
+    plan: free
+    region: virginia
+    healthCheckPath: /healthz
+    envVars:
+      - key: AUTO_DEMO
+        value: "1"
+      - key: NODE_ENV
+        value: production
+      - key: TRUST_PROXY
+        value: "1"
+      - key: MAPS_PROVIDER
+        value: local
