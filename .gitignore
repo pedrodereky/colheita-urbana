@@ -5,3 +5,6 @@ node_modules
 # cookies de teste do curl
 -H
 cookies*.txt
+
+# cache local do Wrangler (Cloudflare)
+.wrangler
