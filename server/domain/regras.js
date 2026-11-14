@@ -46,7 +46,7 @@ export function transportadorApto(transportadorId) {
   const u = get("SELECT status_cadastro AS s FROM usuarios WHERE id=? AND tipo='TRANSPORTADOR'", transportadorId);
   const t = get('SELECT suspenso_ate FROM transportadores WHERE usuario_id=?', transportadorId);
   if (!u || u.s !== 'APROVADO') return { apto: false, motivo: 'Cadastro de transportador não validado (RN02).' };
-  if (t.suspenso_ate && new Date(t.suspenso_ate) > agora()) {
+  if (t?.suspenso_ate && new Date(t.suspenso_ate) > agora()) {
     return { apto: false, motivo: `Você está suspenso até ${new Date(t.suspenso_ate).toLocaleDateString('pt-BR')} por faltas consecutivas (RN20).` };
   }
   return { apto: true };
