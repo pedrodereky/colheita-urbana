@@ -1,0 +1,21 @@
+name: Relatar um problema
+description: Algo não funciona como deveria
+labels: [bug]
+body:
+  - type: textarea
+    id: descricao
+    attributes:
+      label: O que aconteceu?
+      description: Descreva o problema e o que você esperava.
+    validations:
+      required: true
+  - type: textarea
+    id: passos
+    attributes:
+      label: Passos para reproduzir
+      placeholder: "1. Entrar como OSC\n2. Reservar uma oferta\n3. ..."
+  - type: dropdown
+    id: perfil
+    attributes:
+      label: Perfil afetado
+      options: [Estabelecimento, OSC, Voluntário, Gestor, Visitante]
