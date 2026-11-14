@@ -1,5 +1,7 @@
 # Colheita Urbana
 
+[![Testes](https://github.com/pedrodereky/colheita-urbana/actions/workflows/testes.yml/badge.svg)](https://github.com/pedrodereky/colheita-urbana/actions/workflows/testes.yml)
+
 Plataforma web responsiva que intermedeia a doação de alimentos excedentes entre estabelecimentos (supermercados, padarias, restaurantes) e OSCs, com voluntários transportadores e gestores. Implementa a documentação *Colheita Urbana – Negócios, Requisitos e Modelagem UML* (40 RF, 20 RNF, 34 RN, 46 casos de uso).
 
 ## Como rodar
@@ -9,7 +11,7 @@ Requer **Node.js 22.5+** (usa o SQLite nativo do Node; **nenhuma dependência np
 ```bash
 npm run seed     # dados de demonstração (opcional)
 npm start        # http://localhost:3000
-npm test         # 24 testes automatizados (RNF09)
+npm test         # 33 testes automatizados (RNF09)
 ```
 
 Contas de demonstração (senha `Senha@123`):
